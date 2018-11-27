@@ -1,0 +1,26 @@
+td {
+    width: 20px;
+    height: 20px;
+    border: solid 1px black;
+    text-align: center;
+    font-weight: bold;
+}
+  
+td:hover {
+    background-color: #dbdbdb;
+    cursor: crosshair;
+}
+
+table tr:first-child{
+    background-color: black;
+    color: white;
+}
+tr td:first-child{
+    background-color: black;
+    color: white;
+}
+table tr:first-child *:hover{
+    background-color: black;
+    color: white;
+}
+
