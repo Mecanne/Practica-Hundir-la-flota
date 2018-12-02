@@ -1,0 +1,26 @@
+{
+  "name": "practica-hundir_la_flota",
+  "version": "1.0.0",
+  "description": "Hundir la flota en web",
+  "main": "app/app.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mecanne/Practica-Hundir_la_flota.git"
+  },
+  "author": "Daniel Díaz Navas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mecanne/Practica-Hundir_la_flota/issues"
+  },
+  "homepage": "https://github.com/Mecanne/Practica-Hundir_la_flota#readme",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0"
+  }
+}
