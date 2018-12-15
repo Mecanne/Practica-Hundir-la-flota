@@ -1,30 +1,68 @@
 const LongitudTablero = 10;
 
 class Jugador {
-    constructor() {
-        this.ataques = new Array();
-        console.log("Jugador creado");
-    }
-
-    establecerTablero(tablero){
-        this.tabla = tablero;
+    constructor(id) {
+        this.id = id;
+        this.ataques = new Array(); // Array de ataques
+        this.tablaDisparos = new Tablero("tablero" + id); // Tablero que se mostrará
+        this.tablaDisparos.dibujarTablero();
+        this.tablaBarcos = new Tablero("oculto"); // Tablero que contendrá nuestros barcos.
+        this.tablaBarcos.colocarBarcosAleatorio(); // Colocamos los barcos aleatoriamente.
+        console.log("Jugador con id: '" + id + "' creado");
     }
 
     mostrarTablero() {
-        this.tablero.mostrar();
+        this.tabla.dibujarTablero();
+    }
+
+    establecerContrincante(contrincante){
+        this.contrincante = contrincante;
+    }
+
+    disparar(fila,columna){
+        // Si esa casilla es distinta de cero en la tabla de disparos, significa que ya se ha disparado ahi, por lo que retornará false.
+        if(this.contrincante.tablaDisparos.tabla[fila][columna] !== 0) return false;
+
+        
+        if(this.contrincante.tablaBarcos.tabla[fila][columna] === 0){
+            this.contrincante.tablaDisparos.tabla[fila][columna] = "A";
+        }else{
+            this.contrincante.tablaDisparos.tabla[fila][columna] = "B";
+        }
+        this.contrincante.tablaDisparos.dibujarTablero();
+        console.log("El jugador: " + this.id + " ha disparado a la posicion " + fila + "," + columna + ".")
+        if(this.contrincante.id === "ia"){
+            this.contrincante.disparar(Math.floor(Math.random()*10),Math.floor(Math.random()*10));
+        }
+        return true;
     }
 
 
 }
 
 class Tablero {
-    constructor(id,jugador) {
-        this.id = id;
-        this.jugador = jugador;
+    constructor(id) {
+        this.id = id; // Id del tablero o del elemento HTML al que hará referencia el tablero.
         this.inicializarTablero();
         console.log("Tablero creado");
-        this.colocado = false;
         this.cantidadBarcos = 0;
+        this.mostrar = true;
+    }
+    
+    comprobarBarco(fila,columna){
+        return this.tabla[fila][columna] !== 0;
+    }
+
+    /**
+     * Funcion que asigna un jugador a este tablero.
+     * @param {Object} jugador Jugador al que pertenecerá este tablero.
+     */
+    establecerJugador(jugador){
+        this.jugador = jugador;
+    }
+
+    mostrar(valor){
+        this.mostrar = valor;
     }
 
     inicializarTablero() {
@@ -44,10 +82,10 @@ class Tablero {
 
     /**
      * 
-     * @param {number} fila Fila en la que se quiere colocar el barco
-     * @param {*} columna 
-     * @param {*} longitud 
-     * @param {*} direccion 
+     * @param {number} fila Fila en la que se quiere colocar el barco.
+     * @param {number} columna Columna en la que se quiere colocar el barco.
+     * @param {number} longitud Longitud que tendrá el barco en cuestion.
+     * @param {string} direccion Dirección en la que se orientará el barco.
      */
     añadirBarco(fila, columna, longitud, direccion) {
         if(this.cantidadBarcos >= 5) return false;
@@ -77,7 +115,7 @@ class Tablero {
                         if(columna === 0){
                             if (this.tabla[fila + i][columna + 1] !== 0) return false;
                         }
-                        // Si no comprueba que no haya ningun barco a ninguno de los dos lados
+                        // Si no, comprueba que no haya ningun barco en ninguno de los dos lados
                         else{
                             if (this.tabla[fila + i][columna - 1] !== 0) return false;
                             if (this.tabla[fila + i][columna + 1] !== 0) return false;
@@ -118,7 +156,7 @@ class Tablero {
                         if(fila === LongitudTablero - 1){
                             if (this.tabla[fila - 1][columna] !== 0) return false;
                         }
-                        // Si no comprueba que no haya ningun barco a ninguno de los dos lados
+                        // Si no, comprueba que no haya ningun barco a ninguno de los dos lados
                         else{
                             if (this.tabla[fila + 1][columna] !== 0) return false; // Debajo
                             if (this.tabla[fila - 1][columna] !== 0) return false; // Encima
@@ -131,6 +169,7 @@ class Tablero {
                         this.tabla[fila][columna + i] = longitud;
                     }
                     this.dibujarTablero();
+                    this.cantidadBarcos++;
                     return true;
                 }
                 return false;
@@ -139,6 +178,9 @@ class Tablero {
         }
     }
 
+    /**
+     * Coloca los barcos de forma aleatoria.
+     */
     colocarBarcosAleatorio(){
         this.vaciarTablero();
         var longitudBarcos = [5,4,3,3,2];
@@ -171,20 +213,23 @@ class Tablero {
 
     dibujarTablero() {
         let tabla = document.getElementById(this.id);
-        
-        while(tabla.hasChildNodes()) {
-            tabla.removeChild(tabla.firstChild);
-        }
-        
-        for (let f = 0; f < this.tabla.length; f++) {
-            var fila = document.createElement("tr");
-            for (let c = 0; c < this.tabla[f].length; c++) {
-                var celda = document.createElement("td");
-                celda.textContent = this.tabla[f][c];
-                fila.appendChild(celda);
+
+        if(tabla !== null){
+            while(tabla.hasChildNodes()) {
+                tabla.removeChild(tabla.firstChild);
             }
-            tabla.appendChild(fila);
+            
+            for (let f = 0; f < this.tabla.length; f++) {
+                var fila = document.createElement("tr");
+                for (let c = 0; c < this.tabla[f].length; c++) {
+                    var celda = document.createElement("td");
+                    celda.textContent = this.tabla[f][c];
+                    fila.appendChild(celda);
+                }
+                tabla.appendChild(fila);
+            }
         }
+        
     }
 }
 
@@ -200,8 +245,8 @@ class Barco {
 
 }
 
-jugador1 = new Jugador();
+jugador1 = new Jugador(1);
+ia = new Jugador("ia");
 
-tablero1 = new Tablero("tablero1");
-tablero1.dibujarTablero();
-
+jugador1.establecerContrincante(ia);
+ia.establecerContrincante(jugador1);
