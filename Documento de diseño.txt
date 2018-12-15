@@ -1,0 +1,11 @@
+Planteamiento de la practica.
+
+La practica consta de tres clases, una clase representando al jugador,
+otra que representa el tablero sobre el que juega cada jugador y otra clase 
+para representar los barcos.
+
+La clase jugador representará basicamente al jugador, cada instancia de esta clase contendrá:
+
+    - 2 Tablero (Objeto Tablero) Un tablero representará la vista del enemigo, y otro que represente la ubicacion de los barcos.
+    - 5 Barcos (Objeto Barco)(Array(5))
+
