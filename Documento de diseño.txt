@@ -9,3 +9,9 @@ La clase jugador representará basicamente al jugador, cada instancia de esta cl
     - 2 Tablero (Objeto Tablero) Un tablero representará la vista del enemigo, y otro que represente la ubicacion de los barcos.
     - 5 Barcos (Objeto Barco)(Array(5))
 
+
+Si la "IA" encuentra un barco del jugador, esta guardará su posicion, y a partir de ahi, cuando esta dispare
+empezará a buscar alrededor del punto guardado. Si vuelve a encontrar un punto, esta guardará la direccion
+en la que ha tenido que buscar para poder derribar las dos posiciones y comenzará a recorrer ese eje hasta
+que le barco sea derribado. Esto se hará con una funcion que identificará la vida que le queda al barco que
+coincida con alguna posicion en la que la "IA" haya disparado.
